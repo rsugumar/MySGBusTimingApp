@@ -1,4 +1,4 @@
-export getChineseGardenMRTTimingsInfo(service_req_url) {
+export function getChineseGardenMRTTimingsInfo(service_req_url) {
   return fetch(service_req_url)
     .then((response) => response.json())
     .then((responseJson) => {
@@ -6,12 +6,18 @@ export getChineseGardenMRTTimingsInfo(service_req_url) {
       for (let bus_service of responseJson['services']) {
         console.log(bus_service);
         if (bus_service.no == '335') {
-          retVal.push(bus_service.next); // immediate bus
-          retVal.push(bus_service.subsequent); // next to immediate
-          retVal.push(bus_service.next2); // next to next
-          retVal.push(bus_service.next3); // already too much? can avoid
+          immediate_next_bus = {'eta': bus_service.next.time, 'duration_sec': bus_service.next.duration_ms/1000};
+          subsequent_bus = {'eta': bus_service.subsequent.time, 'duration_sec': bus_service.subsequent.duration_ms/1000};
+          next2_bus = {'eta': bus_service.next2.time, 'duration_sec': bus_service.next2.duration_ms/1000};
+          next3_bus = {'eta': bus_service.next3.time, 'duration_sec': bus_service.next3.duration_ms/1000};
+
+          retVal.push(immediate_next_bus); // immediate bus
+          retVal.push(subsequent_bus); // next to immediate
+          retVal.push(next2_bus); // next to next
+          retVal.push(next3_bus); // already too much? can avoid
         }
       }
+
       return retVal;
     })
     .catch((error) => {
@@ -20,7 +26,7 @@ export getChineseGardenMRTTimingsInfo(service_req_url) {
     });
 }
 
-export getMoviesListFromFB(service_req_url) {
+export function getMoviesListFromFB(service_req_url) {
   return fetch(service_req_url)
     .then((response) => response.json())
     .then((responseJson) => {

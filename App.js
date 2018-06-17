@@ -11,15 +11,15 @@ export default class MySGBusTimings extends React.Component {
     let api_url = 'https://arrivelah.herokuapp.com/?id=';
     let chinese_garden_bus_stop_id = '28341';
     this.req_url = api_url + chinese_garden_bus_stop_id;
-    this.req_url = 'https://facebook.github.io/react-native/movies.json';
+    // this.req_url = 'https://facebook.github.io/react-native/movies.json';
   }
 
   componentDidMount() {
-    getMoviesListFromFB(this.req_url)
-      .then((movieList) => {
+    getChineseGardenMRTTimingsInfo(this.req_url)
+      .then((responseJson) => {
         this.setState({
             isLoading: false,
-            dataSource: JSON.stringify(movieList)
+            dataSource: JSON.stringify(responseJson)
           });
         });
   }
